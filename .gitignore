@@ -1,0 +1,4 @@
+# **/docker-compose.yml
+# **/*application.properties
+# **/application-*.propeties
+**/mysql/data
