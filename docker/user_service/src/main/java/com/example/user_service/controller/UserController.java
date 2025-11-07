@@ -10,5 +10,10 @@ public class UserController {
     public String hello() {
         return "Hello from UserService!";
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "testing code change auto-rebuild. HONK!";
+    }
 }
 
