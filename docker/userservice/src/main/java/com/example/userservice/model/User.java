@@ -19,6 +19,9 @@ public class User {
     @Column(nullable = false, length = 150, unique = true)
     private String email;
 
+    @Column(name = "is_test", nullable = false)
+    private boolean isTest = false;
+
     public User() {
     }
 
@@ -26,6 +29,13 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public User(String firstName, String lastName, String email, boolean isTest) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.isTest = isTest;
     }
 
     public Long getId() {
@@ -54,5 +64,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isTest() {
+        return isTest;
+    }
+
+    public void setTest(boolean test) {
+        isTest = test;
     }
 }
