@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Minimal HTTP API that proxies /api/{proxy+} to an internal backend host (e.g. userservice:8080).
+Parameters:
+  BackendHost:
+    Type: String
+    Default: userservice:8080
+    Description: host:port reachable from LocalStack (docker-compose service name + port)
+
+Resources:
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: local-proxy-api
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowMethods: [GET,POST,PUT,DELETE,OPTIONS]
+        AllowOrigins: ['*']
+
+  ApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: HTTP_PROXY
+      IntegrationUri: !Sub 'http://${BackendHost}/{proxy}'
+      PayloadFormatVersion: '1.0'
+
+  ApiRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'ANY /api/{proxy+}'
+      Target: !Sub 'integrations/${ApiIntegration}'
+
+  ApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: dev
+      AutoDeploy: true
+
+Outputs:
+  ApiEndpoint:
+    Description: HTTP API endpoint (use LocalStack edge URL + path)
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/dev'
