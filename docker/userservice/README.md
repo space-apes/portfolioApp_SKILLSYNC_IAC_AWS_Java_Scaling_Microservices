@@ -1,5 +1,12 @@
 # userservice — local development
 
+TODO: 
+- entity business logic tests
+- endpoint tests
+- exception handling for endpoints
+
+
+
 This module runs a small Spring Boot service (`userservice`). These notes show how to run it locally against a MySQL database using the `dev` profile.
 
 ## Prerequisites
